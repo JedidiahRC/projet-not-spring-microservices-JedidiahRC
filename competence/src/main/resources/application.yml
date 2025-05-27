@@ -1,0 +1,37 @@
+server:
+  port: 8080
+
+spring:
+  application:
+    name: competence
+  datasource:
+    url: jdbc:h2:mem:competenceDb
+  h2:
+    console:
+      enabled:true
+
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8762/eureka
+
+resilience4j:
+  circuitbreaker:
+    instances:
+      competenceService:
+        registerHealthIndicator: true
+        failureRateThreshold: 50
+        minimumNumberOfCalls: 5
+        slidingWindowSize: 10
+        waitDurationInOpenState: 5s
+  timelimiter:
+    instances:
+      competenceService:
+        timeoutDuration: 3s
